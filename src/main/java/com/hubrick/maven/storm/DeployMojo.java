@@ -16,13 +16,9 @@
 package com.hubrick.maven.storm;
 
 import backtype.storm.Config;
-import backtype.storm.StormSubmitter;
 import backtype.storm.generated.ClusterSummary;
-import backtype.storm.generated.NotAliveException;
-import backtype.storm.generated.TopologyInfo;
 import backtype.storm.generated.TopologySummary;
 import backtype.storm.security.auth.SimpleTransportPlugin;
-import backtype.storm.topology.TopologyBuilder;
 import backtype.storm.utils.NimbusClient;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
@@ -35,13 +31,11 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.thrift7.TException;
 
 import java.io.File;
-import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -73,6 +67,11 @@ public class DeployMojo extends AbstractStormMojo {
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
+        final File file = new File(jarFile);
+        if (!file.exists()) {
+            throw new MojoExecutionException("No such file: " + file.getAbsolutePath());
+        }
+
         try {
             final Config config = createClientConfig();
             final NimbusClient nimbusClient = NimbusClient.getConfiguredClient(config);

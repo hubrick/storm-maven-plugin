@@ -139,7 +139,7 @@ public class DeployMojo extends AbstractStormMojo {
     private final void invokeMainInJar(String jarFile, String mainClass) throws MalformedURLException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, InterruptedException, ExecutionException {
         final File file = new File(jarFile);
         final URL[] urls = {file.toURI().toURL()};
-        final URLClassLoader loader = new URLClassLoader(urls);
+        final URLClassLoader loader = new URLClassLoader(urls, this.getClass().getClassLoader());
         final Class<?> cls = loader.loadClass(mainClass);
         final Method main = cls.getDeclaredMethod("main", String[].class);
 

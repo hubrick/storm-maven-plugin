@@ -39,6 +39,8 @@ import java.net.URLClassLoader;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -134,24 +136,28 @@ public class DeployMojo extends AbstractStormMojo {
         getLog().info("Setting storm.jar property to " + jarFile);
     }
 
-    private final void invokeMainInJar(String jarFile, String mainClass) throws MalformedURLException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, InterruptedException {
+    private final void invokeMainInJar(String jarFile, String mainClass) throws MalformedURLException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, InterruptedException, ExecutionException {
         final File file = new File(jarFile);
         final URL[] urls = {file.toURI().toURL()};
-        final URLClassLoader loader = new URLClassLoader(urls, this.getClass().getClassLoader());
+        final URLClassLoader loader = new URLClassLoader(urls);
         final Class<?> cls = loader.loadClass(mainClass);
         final Method main = cls.getDeclaredMethod("main", String[].class);
+
+        final CompletableFuture<Void> result = new CompletableFuture<>();
 
         final Thread thread = new Thread(() -> {
             try {
                 main.invoke(null, new Object[]{arguments.toArray(new String[0])});
+                result.complete(null);
             } catch (Exception e) {
                 getLog().info("Failed to execute main method in jar file " + jarFile, e);
+                result.completeExceptionally(e);
             }
         });
 
         thread.setContextClassLoader(loader);
         thread.start();
-        thread.join();
+        result.get();
     }
 
     private Optional<TopologySummary> getTopologySummary(final String name, final NimbusClient client) throws TException {

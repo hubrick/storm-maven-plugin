@@ -8,7 +8,7 @@
     </parent>
 	<groupId>com.hubrick.maven</groupId>
 	<artifactId>storm-maven-plugin</artifactId>
-	<version>0.1.1-SNAPSHOT</version>
+	<version>0.2.0-SNAPSHOT</version>
 	<packaging>maven-plugin</packaging>
 	<name>Storm Maven Plugin</name>
 	<description>Maven plugin for interacting with Storm</description>
@@ -57,7 +57,7 @@
         <dependency>
             <groupId>org.apache.storm</groupId>
             <artifactId>storm-core</artifactId>
-            <version>0.9.7</version>
+            <version>1.0.2</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>

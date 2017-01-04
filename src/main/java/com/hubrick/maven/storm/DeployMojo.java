@@ -15,11 +15,6 @@
  */
 package com.hubrick.maven.storm;
 
-import backtype.storm.Config;
-import backtype.storm.generated.ClusterSummary;
-import backtype.storm.generated.TopologySummary;
-import backtype.storm.security.auth.SimpleTransportPlugin;
-import backtype.storm.utils.NimbusClient;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
 import com.jayway.awaitility.Awaitility;
@@ -28,7 +23,12 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.thrift7.TException;
+import org.apache.storm.Config;
+import org.apache.storm.generated.ClusterSummary;
+import org.apache.storm.generated.TopologySummary;
+import org.apache.storm.security.auth.SimpleTransportPlugin;
+import org.apache.storm.thrift.TException;
+import org.apache.storm.utils.NimbusClient;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;

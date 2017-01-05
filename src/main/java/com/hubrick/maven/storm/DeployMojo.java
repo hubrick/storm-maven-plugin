@@ -172,6 +172,11 @@ public class DeployMojo extends AbstractStormMojo {
         nimbusConfig.put(Config.NIMBUS_THRIFT_PORT, nimbusPort);
         nimbusConfig.put(Config.STORM_THRIFT_TRANSPORT_PLUGIN, SimpleTransportPlugin.class.getCanonicalName());
 
+        nimbusConfig.put(Config.STORM_NIMBUS_RETRY_TIMES, 5);
+        nimbusConfig.put(Config.STORM_NIMBUS_RETRY_INTERVAL, 10000);
+        nimbusConfig.put(Config.STORM_NIMBUS_RETRY_INTERVAL_CEILING, 30000);
+
+
         return nimbusConfig;
     }
 }

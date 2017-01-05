@@ -176,6 +176,7 @@ public class DeployMojo extends AbstractStormMojo {
         nimbusConfig.put(Config.STORM_NIMBUS_RETRY_INTERVAL, 10000);
         nimbusConfig.put(Config.STORM_NIMBUS_RETRY_INTERVAL_CEILING, 30000);
 
+        nimbusConfig.put(Config.NIMBUS_THRIFT_MAX_BUFFER_SIZE, 1048576); // taken from default.yaml
 
         return nimbusConfig;
     }
